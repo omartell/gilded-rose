@@ -21,6 +21,8 @@
                      (merge item {:quality (inc (:quality item))})
                      item)))
 
+               (= 0 (:quality item)) item ;; Quality should never be negative for all other items
+
                (< (:sell-in item) 0)
                (if (= "Backstage passes to a TAFKAL80ETC concert" (:name item))
                  (merge item {:quality 0}) ;; Again drop quality to zero after concert

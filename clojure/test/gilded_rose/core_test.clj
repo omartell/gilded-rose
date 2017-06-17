@@ -21,9 +21,9 @@
           {:name "Backstage passes to a TAFKAL80ETC concert", :sell-in 14, :quality 21}]
          (inventory-after-days 1 initial-inventory)))
 
-  (is (= [{:name "+5 Dexterity Vest", :sell-in -6, :quality -2}
+  (is (= [{:name "+5 Dexterity Vest", :sell-in -6, :quality 0}
           {:name "Aged Brie", :sell-in -14, :quality 16}
-          {:name "Elixir of the Mongoose", :sell-in -11, :quality -20}
+          {:name "Elixir of the Mongoose", :sell-in -11, :quality 0}
           {:name "Sulfuras, Hand Of Ragnaros", :sell-in -16, :quality 80}
           {:name "Backstage passes to a TAFKAL80ETC concert", :sell-in -1, :quality 0}]
          (inventory-after-days 16 initial-inventory))))
@@ -35,4 +35,8 @@
 
   (testing "quality decreases by 4 once sell-by date has passed"
     (is (= [{:name "Conjured" :sell-in -2 :quality 2}]
-           (inventory-after-days 7 [(item "Conjured" 5 20)])))))
+           (inventory-after-days 7 [(item "Conjured" 5 20)]))))
+
+  (testing "quality is never be negative once sell by date has passed"
+    (is (= [{:name "Conjured" :sell-in -5 :quality 0}]
+           (inventory-after-days 5 [(item "Conjured" 0 0)])))))

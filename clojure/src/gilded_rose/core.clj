@@ -24,16 +24,24 @@
                (< (:sell-in item) 0)
                (if (= "Backstage passes to a TAFKAL80ETC concert" (:name item))
                  (merge item {:quality 0}) ;; Again drop quality to zero after concert
-                 (if (or (= "+5 Dexterity Vest" (:name item))
-                         (= "Elixir of the Mongoose" (:name item)))
+                 (cond
                    ;; Once the sell in date has passed degrade quality twice as fast
+                   (or (= "+5 Dexterity Vest" (:name item))
+                       (= "Elixir of the Mongoose" (:name item)))
                    (merge item {:quality (- (:quality item) 2)})
-                   item))
+
+                   ;; Degrade twice as fast for Conjured items
+                   (= "Conjured" (:name item))
+                   (merge item {:quality (- (:quality item) 4)})
+
+                   :else item))
 
                (or (= "+5 Dexterity Vest" (:name item))
-                   (= "Elixir of the Mongoose" (:name item)))
-               ;; Degrade quality by 1
+                   (= "Elixir of the Mongoose" (:name item)))  ;; Degrade quality by 1
                (merge item {:quality (dec (:quality item))})
+
+               (= "Conjured" (:name item))
+               (merge item {:quality (dec (dec (:quality item)))}) ;; Degrade quality by 2
 
                :else item))
    (map (fn [item]

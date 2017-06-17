@@ -27,3 +27,12 @@
           {:name "Sulfuras, Hand Of Ragnaros", :sell-in -16, :quality 80}
           {:name "Backstage passes to a TAFKAL80ETC concert", :sell-in -1, :quality 0}]
          (inventory-after-days 16 initial-inventory))))
+
+(deftest conjured-items-degrade-quality-twice-as-fast
+  (testing "quality decreases by 2 before sell-by date"
+    (is (= [{:name "Conjured" :sell-in 0 :quality 0}]
+           (inventory-after-days 5 [(item "Conjured" 5 10)]))))
+
+  (testing "quality decreases by 4 once sell-by date has passed"
+    (is (= [{:name "Conjured" :sell-in -2 :quality 2}]
+           (inventory-after-days 7 [(item "Conjured" 5 20)])))))
